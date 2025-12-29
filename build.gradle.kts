@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.21"
+    kotlin("plugin.spring") version "2.0.21"
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
@@ -17,9 +18,13 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot
+    // Spring Boot / Web
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // Database
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -28,6 +33,9 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql:10.13.0")
 
     // Testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 }
