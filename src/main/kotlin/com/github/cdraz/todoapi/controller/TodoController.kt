@@ -1,0 +1,27 @@
+package com.github.cdraz.todoapi.controller
+
+import com.github.cdraz.todoapi.dto.CreateTodoRequest
+import com.github.cdraz.todoapi.dto.TodoResponse
+import com.github.cdraz.todoapi.service.TodoService
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus.CREATED
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/users/{userId}/todos")
+class TodoController(
+    private val todoService: TodoService
+) {
+    @PostMapping
+    @ResponseStatus(CREATED)
+    fun createTodo(
+        @PathVariable userId: Long,
+        @Valid @RequestBody request: CreateTodoRequest
+    ): TodoResponse =
+        todoService.createTodo(userId, request)
+}
