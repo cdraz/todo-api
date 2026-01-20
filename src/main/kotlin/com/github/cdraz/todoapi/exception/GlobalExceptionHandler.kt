@@ -63,9 +63,23 @@ class GlobalExceptionHandler {
         )
     }
 
+    // Handles attempts to access or create resources for a user that does not exist
+    @ExceptionHandler(UserNotFoundException::class)
+    fun handleUserNotFound(
+        ex: UserNotFoundException
+    ): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ErrorResponse(
+                status = HttpStatus.NOT_FOUND.value(),
+                error = "User not found",
+                message = ex.message
+            )
+        )
+    }
+
     // Handles malformed or unreadable JSON in the request body
     @ExceptionHandler(HttpMessageNotReadableException::class)
-    @Suppress("UnusedParameter") // Surpressing unused parameter for detekt
+    @Suppress("UnusedParameter") // Suppressing unused parameter for detekt
     fun handleUnreadableMessage(
         ex: HttpMessageNotReadableException
     ): ResponseEntity<ErrorResponse> {
@@ -80,7 +94,7 @@ class GlobalExceptionHandler {
 
     // Fallback handler for any unhandled exceptions (internal server errors)
     @ExceptionHandler(Exception::class)
-    @Suppress("UnusedParameter") // Surpressing unused parameter for detekt
+    @Suppress("UnusedParameter") // Suppressing unused parameter for detekt
     fun handleGenericException(
         ex: Exception
     ): ResponseEntity<ErrorResponse> {
