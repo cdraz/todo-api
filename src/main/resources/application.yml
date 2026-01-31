@@ -21,6 +21,11 @@ spring:
     schemas: public
     locations: classpath:db/migration
 
+  jackson:
+    deserialization:
+      fail-on-missing-creator-properties: true
+      fail-on-null-for-primitives: true
+
 logging:
   level:
     org.hibernate.SQL: OFF
