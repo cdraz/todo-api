@@ -85,4 +85,18 @@ class TodoControllerWebMvcTest {
 
         verify(exactly = 0) { todoService.createTodo(any(), any()) }
     }
+
+    @Test
+    fun `PATCH users userId todos todoId title returns 400 when request body is missing`() {
+        val userId = 1L
+        val todoId = 1
+
+        mockMvc.post("/users/$userId/todos/$todoId/title") {
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isBadRequest() }
+        }
+
+        verify(exactly = 0) { todoService.createTodo(any(), any()) }
+    }
 }

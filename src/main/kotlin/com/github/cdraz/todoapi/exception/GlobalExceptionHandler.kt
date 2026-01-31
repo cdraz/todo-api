@@ -106,4 +106,15 @@ class GlobalExceptionHandler {
             )
         )
     }
+
+    @ExceptionHandler(TodoNotFoundForUserException::class)
+    fun handleTodoNotFound(ex: TodoNotFoundForUserException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ErrorResponse(
+                status = HttpStatus.NOT_FOUND.value(),
+                error = "Todo not found",
+                message = ex.message
+            )
+        )
+    }
 }
