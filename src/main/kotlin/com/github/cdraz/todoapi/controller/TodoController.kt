@@ -7,6 +7,7 @@ import com.github.cdraz.todoapi.dto.UpdateTodoTitleRequest
 import com.github.cdraz.todoapi.service.TodoService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,7 +30,7 @@ class TodoController(
         todoService.createTodo(userId, request)
 
     @PatchMapping("/{todoId}/title")
-    @ResponseStatus(CREATED)
+    @ResponseStatus(OK)
     fun updateTitle(
         @PathVariable userId: Long,
         @PathVariable todoId: Long,
@@ -38,7 +39,7 @@ class TodoController(
         todoService.updateTodoTitle(userId, todoId, request)
 
     @PatchMapping("/{todoId}/completed")
-    @ResponseStatus(CREATED)
+    @ResponseStatus(OK)
     fun updateCompletion(
         @PathVariable userId: Long,
         @PathVariable todoId: Long,

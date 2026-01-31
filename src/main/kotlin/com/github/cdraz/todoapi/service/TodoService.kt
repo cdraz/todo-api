@@ -35,7 +35,7 @@ class TodoService(
 
     @Transactional
     fun updateTodoTitle(userId: Long, todoId: Long, request: UpdateTodoTitleRequest): TodoResponse {
-        val todo = todoRepository.findByIdAndUserId(todoId, userId)
+        val todo = todoRepository.findByIdAndUser_Id(todoId, userId)
             ?: throw TodoNotFoundForUserException(todoId, userId)
 
         if (todo.title != request.title) {
@@ -48,7 +48,7 @@ class TodoService(
 
     @Transactional
     fun updateTodoCompletion(userId: Long, todoId: Long, request: UpdateTodoCompletionRequest): TodoResponse {
-        val todo = todoRepository.findByIdAndUserId(todoId, userId)
+        val todo = todoRepository.findByIdAndUser_Id(todoId, userId)
             ?: throw TodoNotFoundForUserException(todoId, userId)
 
         if (todo.completed != request.completed) {
