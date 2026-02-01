@@ -8,6 +8,7 @@ import com.github.cdraz.todoapi.service.TodoService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.OK
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,6 +29,21 @@ class TodoController(
         @Valid @RequestBody request: CreateTodoRequest
     ): TodoResponse =
         todoService.createTodo(userId, request)
+
+    @GetMapping
+    @ResponseStatus(OK)
+    fun getAllTodos(
+        @PathVariable userId: Long
+    ) : List<TodoResponse> =
+        todoService.getTodosForUser(userId)
+
+    @GetMapping("/{todoId}")
+    @ResponseStatus(OK)
+    fun getTodo(
+        @PathVariable userId: Long,
+        @PathVariable todoId: Long
+    ) : TodoResponse =
+          todoService.getTodo(userId, todoId)
 
     @PatchMapping("/{todoId}/title")
     @ResponseStatus(OK)

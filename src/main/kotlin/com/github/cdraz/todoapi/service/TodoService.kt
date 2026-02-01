@@ -8,6 +8,7 @@ import com.github.cdraz.todoapi.entity.TodoEntity
 import com.github.cdraz.todoapi.exception.TodoNotFoundForUserException
 import com.github.cdraz.todoapi.exception.UserNotFoundException
 import com.github.cdraz.todoapi.repository.TodoRepository
+import com.github.cdraz.todoapi.repository.TodoView
 import com.github.cdraz.todoapi.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -17,6 +18,24 @@ class TodoService(
     private val todoRepository: TodoRepository,
     private val userRepository: UserRepository
 ) {
+
+    fun getTodo(userId: Long, todoId: Long): TodoResponse {
+        val todoView = todoRepository.findViewByIdAndUserId(todoId, userId)
+        if (todoView != null) return todoView.toResponse()
+        // if nothing found, check if user exists
+        if (!userRepository.existsById(userId)) {
+            throw UserNotFoundException(userId)
+        }
+        throw TodoNotFoundForUserException(todoId, userId)
+    }
+
+    fun getTodosForUser(userId: Long): List<TodoResponse> {
+        if (!userRepository.existsById(userId)) {
+            throw UserNotFoundException(userId)
+        }
+        return todoRepository.findAllProjectedByUser_IdOrderByCreatedAtDesc(userId)
+            .map { it.toResponse() }
+    }
 
     @Transactional
     fun createTodo(userId: Long, request: CreateTodoRequest): TodoResponse {
@@ -66,4 +85,14 @@ class TodoService(
             createdAt = this.createdAt,
             userId = this.user.id
         )
+
+    private fun TodoView.toResponse(): TodoResponse =
+        TodoResponse(
+            id = id,
+            title = title,
+            completed = completed,
+            createdAt = createdAt,
+            userId = userId
+        )
+
 }

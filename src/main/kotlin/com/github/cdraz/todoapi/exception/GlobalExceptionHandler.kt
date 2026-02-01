@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -114,6 +115,22 @@ class GlobalExceptionHandler {
                 status = HttpStatus.NOT_FOUND.value(),
                 error = "Todo not found",
                 message = ex.message
+            )
+        )
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun handleTypeMismatch(ex: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
+        val name = ex.name
+        val value = ex.value?.toString()
+        val expected = ex.requiredType?.simpleName ?: "required type"
+
+        return ResponseEntity.badRequest().body(
+            ErrorResponse(
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = "Invalid parameter",
+                message = "Parameter '$name' must be a valid $expected",
+                details = mapOf(name to "Got '$value'")
             )
         )
     }
